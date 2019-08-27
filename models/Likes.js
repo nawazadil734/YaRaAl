@@ -1,21 +1,25 @@
 const mongooose = require('mongoose');
 const { Schema } = mongooose;
 
-const UpvoteSchema = new Schema({
+const LikesSchema = new Schema({
     count: {
         type: Number,
         default: 0
     },
-    user: {
+    userliked: {
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
     post: {
         type: Schema.Types.ObjectId,
         ref: 'blogPost'
-    }
+    },
+    dateLiked: {
+        type: String,
+        default: months[date.getMonth()] + '  ' + date.getDate() + ' , ' + date.getFullYear() 
+    },
 });
 
-const Upvotes = mongooose.model('like', UpvoteSchema);
+const Likes = mongooose.model('like', LikesSchema);
 
-module.exports = Upvotes;
+module.exports = Likes;

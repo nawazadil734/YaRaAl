@@ -1,6 +1,9 @@
 const passport = require('passport');
 const mongoose = require('mongoose');
 const Community = mongoose.model('community');
+const User = mongoose.model('users');
+const Post = mongoose.model('blogPost');
+
 
 module.exports = (app) => {
         app.get('/auth/google', passport.authenticate('google', {
@@ -71,9 +74,51 @@ module.exports = (app) => {
             res.send(data);
         })
 
-        app.post('/api/createPost', (req, res) => {
-            console.log(req.body);
-            res.send({ hi : "adil"})
+        app.post('/api/createPost', async (req, res) => {
+            const post = new Post({ title: req.body.title, 
+                        content: req.body.content, 
+                        videoURL: req.body.url});
+            const user = await User.findOne({ email: req.body.email});
+            user.posts.push(post);
+            user.save();
+            const com = await Community.findOne({ title : req.body.community});
+            com.blogPosts.push(post);
+            com.save();
+            post.user = user;
+            post.community = com;
+            post.save();
+            res.redirect('/');
+        })
+
+        app.get('/api/posts', async (req, res) => {
+            const allPosts = await Post.find().populate('community').populate('user');
+            res.send(allPosts);
+        })
+
+        app.post('/api/editposts', async (req, res) => {
+            const response = await Post.findById(req.body.id);
+            await Post.updateOne({ _id: response._id}, { $set: { title: req.body.title, content: req.body.content,  videoURL: req.body.videoURL}});
+            res.redirect("/");
+            
+        });
+
+        app.delete("/api/deletePost", async (req, res) => {
+            const id = req.body.foo;
+            await Post.deleteOne({ _id: id});
+            res.send({});
+        });
+
+        app.get('/api/fetchLikes', async (req, res) => {
+            console.log(req.headers);
+            res.send({});
+        });
+
+        app.get('/api/fetchPost', async (req, res) => {
+            const url = req.headers.referer;
+            var parts = url.split('/');
+            var lastSegment = parts.pop()  // handle potential trailing slash
+            const response = await Post.findById({ _id : lastSegment});
+            res.send(response);
         })
 }
 

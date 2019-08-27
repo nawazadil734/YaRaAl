@@ -1,28 +1,25 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose; 
-
+const date = new Date();
+const months = ["January", "Feburary", "March","April", "May", "June", "July", "August", "September", "Octuber", "November", "December"];
 const BlogPostSchema = new Schema({
     title: String,
-    content: {
+    content: String,
+    likes: [{
         type: Schema.Types.ObjectId,
-        ref: 'content'
-    },
-    upvote: {
-        type: Schema.Types.ObjectId,
-        ref:'upvote'
-    },
-    downvote: {
-        type: Schema.Types.ObjectId,
-        ref:'downvote'
-    },
+        ref:'like'
+    }],
     user: {
         type: Schema.Types.ObjectId,
-        ref:'user'
+        ref:'users'
     },
     link: {
         url: String
     },
-    dateCreated: Date,
+    dateCreated: {
+        type: String,
+        default: months[date.getMonth()] + '  ' + date.getDate() + ' , ' + date.getFullYear() 
+    },
     videoURL: String,
     community: {
         type: Schema.Types.ObjectId,

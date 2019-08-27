@@ -22,7 +22,7 @@ passport.use(new GoogleStrategy({
     User.findOne({ email: profile._json.email })
     .then(existingUser => {
         if(existingUser) {
-            existingUser.update({ googleId: profile.id})
+            existingUser.updateOne({ googleId: profile.id})
             .then((user) => user.save())
             return done(null, existingUser);
         }
@@ -56,12 +56,4 @@ passport.use(new FacebookStrategy({
         .save()
         .then(user => cb(null, user));
     });
-}));
-
-passport.use(new InstagramStrategy({
-    clientID: keys.instagramClientID,
-    clientSecret: keys.linkedInClientSecret,
-    callbackURL: "/auth/instagram/callback"
-}, (accessToken, refreshToken, profile, done) => {
-    console.log("User", profile);
 }));

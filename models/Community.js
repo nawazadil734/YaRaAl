@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const communityCreateSchema = new Schema({
     title: String,
     group: String,
-    blogPost: [{
+    blogPosts: [{
         type: Schema.Types.ObjectId
     }],
     img: String,

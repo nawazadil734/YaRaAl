@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 
 require('./models/User');
 require('./models/Community');
+require('./models/Post');
 require('./services/passport');
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });

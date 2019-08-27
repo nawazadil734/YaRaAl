@@ -13,7 +13,7 @@ const userSchema = new Schema({
     uploadPhoto: String,
     password: String,
     bio: String,
-    commnunity: [{
+    commnunities: [{
         type: Schema.Types.ObjectId,
         ref: 'community'
     }],
@@ -25,7 +25,7 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'notification'
     }],
-    post: [{
+    posts: [{
         type: Schema.Types.ObjectId,
         ref: 'blogPost'
     }],
